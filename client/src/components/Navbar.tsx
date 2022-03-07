@@ -1,7 +1,7 @@
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import { ReactComponent as LogoBase } from '../assets/logo.svg';
-import { GradientBar } from './GradiantBar';
+import { GradientBar } from './GradientBar';
 import { Link } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
 import { myContext } from '../hooks/Context';
