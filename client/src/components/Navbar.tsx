@@ -10,14 +10,17 @@ import { IUser } from '../interface';
 import { ReactComponent as DiscordIcon } from '../assets/discord-icon.svg';
 // import { useNavigate } from 'react-router-dom';
 
-
 const NavContainer = styled.nav`
-  ${tw`flex items-center justify-between bg-secondary-700 py-6 px-6 lg:px-10 lg:py-8 w-full mb-6 lg:mb-12`}
+  ${tw`flex items-center justify-center lg:justify-between bg-secondary-700 py-6 px-6 lg:px-10 lg:py-8 w-full mb-6 lg:mb-12`}
 `;
 
 const Logo = tw(
   LogoBase
 )`h-10 w-10 hover:text-primary-500 transition duration-300 text-gray-300`;
+
+const MobileResponsive = styled.div`
+  ${tw`hidden lg:flex items-center justify-between`}
+`;
 
 const NavLink = tw(
   Link
@@ -65,7 +68,7 @@ export default function Navbar() {
         withCredentials: true,
       })
       .then((res: AxiosResponse) => {
-        if (res.data.message === 'Logout succesful') {
+        if (res.data.message === 'Logout successful') {
           window.location.href = '/';
         }
       });
@@ -97,21 +100,25 @@ export default function Navbar() {
           <NavLink to="/">
             <Logo />
           </NavLink>
-          <NavLink to="/">Profiles</NavLink>
-          <NavLink to="/featured">Featured</NavLink>
+          <MobileResponsive>
+            <NavLink to="/">Profiles</NavLink>
+            <NavLink to="/featured">Featured</NavLink>
+          </MobileResponsive>
         </MainLinks>
-        <UserContextLinks>
-          {user ? (
-            <>
-              <NavLink to="/profile">My Profile</NavLink>
-              <LogoutNavLink onClick={logout}>Logout</LogoutNavLink>
-            </>
-          ) : (
-            <LoginNavLink onClick={() => setShowModal(true)}>
-              Log In
-            </LoginNavLink>
-          )}
-        </UserContextLinks>
+        <MobileResponsive>
+          <UserContextLinks>
+            {user ? (
+              <>
+                <NavLink to="/profile">My Profile</NavLink>
+                <LogoutNavLink onClick={logout}>Logout</LogoutNavLink>
+              </>
+            ) : (
+              <LoginNavLink onClick={() => setShowModal(true)}>
+                Log In
+              </LoginNavLink>
+            )}
+          </UserContextLinks>
+        </MobileResponsive>
       </NavContainer>
     </>
   );
