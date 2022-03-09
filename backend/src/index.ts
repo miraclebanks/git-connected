@@ -30,14 +30,25 @@ app.use(
   })
 );
 app.set('trust proxy', 1);
-const URI = `${process.env.MONGODB_URI_START}${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}${process.env.MONGODB_URI_END}`;
+
+let MONGODB_URL = '';
+
+process.env.NODE_ENV !== 'production'
+  ? (MONGODB_URL = `${process.env.DEVELOPMENT_MONGODB_URL}`)
+  : (MONGODB_URL = `${process.env.PRODUCTION_MONGODB_URL}`);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
+    cookie: {
+      maxAge: 60000, //1Sec * 1H * 24 = 1 Day
+      secure: process.env.NODE_ENV !== "production" ? false : true
+    }
+    ,
     resave: false,
     saveUninitialized: false,
     store: mongoStore.create({
-      mongoUrl: `${URI}`,
+      mongoUrl: `${MONGODB_URL}`,
     }),
   })
 );

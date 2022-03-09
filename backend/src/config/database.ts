@@ -1,8 +1,12 @@
 import mongoose from 'mongoose';
 
-const URI = `${process.env.MONGODB_URI_START}${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}${process.env.MONGODB_URI_END}`;
+let MONGODB_URL = '';
 
-mongoose.connect(`${URI}`, (err) => {
+process.env.NODE_ENV !== 'production'
+  ? MONGODB_URL = `${process.env.DEVELOPMENT_MONGODB_URL}`
+  : MONGODB_URL = `${process.env.PRODUCTION_MONGODB_URL}`;
+
+mongoose.connect(`${MONGODB_URL}`, (err) => {
   if (err) throw err;
   console.log('MongoDB connected');
 });
