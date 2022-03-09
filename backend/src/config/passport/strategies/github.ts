@@ -1,15 +1,15 @@
 const GitHubStrategy = require('passport-github2').Strategy;
 
-let gitHubClientID = ''
-let gitHubClientSecret = ''
+let gitHubClientID = '';
+let gitHubClientSecret = '';
 
 if (process.env.NODE_ENV === 'production') {
-  gitHubClientID = `${process.env.PRODUCTION_GITHUB_CLIENT_ID}`
-  gitHubClientSecret = `${process.env.PRODUCTION_GITHUB_CLIENT_SECRET}`
+  gitHubClientID = `${process.env.PRODUCTION_GITHUB_CLIENT_ID}`;
+  gitHubClientSecret = `${process.env.PRODUCTION_GITHUB_CLIENT_SECRET}`;
 } else {
-  gitHubClientID = `${process.env.GITHUB_CLIENT_ID}`
-  gitHubClientSecret = `${process.env.GITHUB_CLIENT_SECRET}`
-  }
+  gitHubClientID = `${process.env.GITHUB_CLIENT_ID}`;
+  gitHubClientSecret = `${process.env.GITHUB_CLIENT_SECRET}`;
+}
 
 const gitHubStrategySettings: any = {
   clientID: gitHubClientID,

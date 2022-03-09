@@ -56,9 +56,8 @@ const ConnectedAccountButton = tw(
   ConnectAccountButton
 )`bg-green-800 hocus:bg-red-800 cursor-pointer`;
 
-const ConnectedAccountText = tw.p` group-hocus:hidden `
-const DisconnectAccountText = tw.p`hidden group-hocus:inline`
-
+const ConnectedAccountText = tw.p` group-hocus:hidden `;
+const DisconnectAccountText = tw.p`hidden group-hocus:inline`;
 
 const LoginContainer = tw.div`px-10 py-2 flex-col flex`;
 
@@ -91,41 +90,37 @@ export default function Profile() {
     openToCoffeeChats,
   } = formData;
 
-  
-
   const handleInputChange = (e: any) =>
     setFormData({
       ...formData,
       [e.target.name]:
         e.target.type === 'checkbox' ? e.target.checked : e.target.value,
-  });
+    });
 
-
-  
-  const removeConnection = async (platformName: string) => { 
-    try { 
+  const removeConnection = async (platformName: string) => {
+    try {
       axios({
         method: 'put',
         url: `http://localhost:4000/api/user/removeConnection`,
-        data: {platformName},
+        data: { platformName },
         withCredentials: true,
         responseType: 'json',
       }).then((res) => {
         if (res) {
           console.log(res.data);
-          window.open("/profile","_self") 
+          window.open('/profile', '_self');
           // more elegant way to do this?? - aim is to refresh page/button so it's clear that it's now disconnected
         }
       });
     } catch (err: any) {
       console.error(err);
     }
-  }
+  };
 
   const handleProfileFormSubmit = async () => {
     setShowModal(false);
 
-    try { 
+    try {
       axios({
         method: 'put',
         url: 'http://localhost:4000/api/user/update',
@@ -233,7 +228,12 @@ export default function Profile() {
           <UserCard {...user} />
           <LoginContainer>
             {user.gitHubConnected ? (
-              <ConnectedAccountButton className="group" onClick={ ()=>{ removeConnection("gitHub") } }>
+              <ConnectedAccountButton
+                className="group"
+                onClick={() => {
+                  removeConnection('gitHub');
+                }}
+              >
                 <GitHubIcon />
                 <ConnectedAccountText>Connected to GitHub</ConnectedAccountText>
                 <DisconnectAccountText>Disconnect GitHub</DisconnectAccountText>
@@ -245,17 +245,26 @@ export default function Profile() {
               </ConnectAccountButton>
             )}
             {user.twitterConnected ? (
-              <ConnectedAccountButton className="group" onClick={ ()=>{ removeConnection("twitter") } }>
+              <ConnectedAccountButton
+                className="group"
+                onClick={() => {
+                  removeConnection('twitter');
+                }}
+              >
                 <TwitterIcon />
-                <ConnectedAccountText>Connected to Twitter</ConnectedAccountText>
-                <DisconnectAccountText>Disconnect Twitter</DisconnectAccountText>
+                <ConnectedAccountText>
+                  Connected to Twitter
+                </ConnectedAccountText>
+                <DisconnectAccountText>
+                  Disconnect Twitter
+                </DisconnectAccountText>
               </ConnectedAccountButton>
             ) : (
               <ConnectAccountButton onClick={twitterConnect}>
                 <TwitterIcon />
                 Connect to Twitter
               </ConnectAccountButton>
-            )} 
+            )}
             {/* {user.lookingForCoffeeChats ? (
               <ConnectedAccountButton disabled>
                 <LinkedInIcon />

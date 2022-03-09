@@ -26,7 +26,7 @@ export default function Featured() {
     return <p>Loading...</p>;
   }
 
-  const randomIndex = Math.floor( Math.random() * users.length ) ;
+  const randomIndex = Math.floor(Math.random() * users.length);
   const randomUser = users[randomIndex];
 
   return (

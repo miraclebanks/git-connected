@@ -4,7 +4,7 @@ import { IReqAuth, IUserUpdateForm } from '../config/interface';
 import Twitter from 'twit';
 import { Octokit } from '@octokit/core';
 
-const defaultOptions =  {
+const defaultOptions = {
   new: true,
   runValidators: true,
   context: 'query',
@@ -18,7 +18,7 @@ export const userUpdate = async (
   const { ...userUpdateProps }: IUserUpdateForm = req.body;
   const id = req.user._id;
   const update = { ...userUpdateProps };
-  const options = defaultOptions
+  const options = defaultOptions;
 
   await User.findByIdAndUpdate(id, update, options, (err, user) => {
     if (!err) {
@@ -32,27 +32,34 @@ export const userUpdate = async (
     });
 };
 
-export const removeConnection = async ( req: IReqAuth, res: Response, next: NextFunction) => { 
+export const removeConnection = async (
+  req: IReqAuth,
+  res: Response,
+  next: NextFunction
+) => {
   const { platformName } = req.body;
   const id = req.user._id;
   const userUpdateProps: any = {};
   userUpdateProps[`${platformName}Connected`] = false;
-  userUpdateProps[`${platformName}Token`] = "";
+  userUpdateProps[`${platformName}Token`] = '';
   userUpdateProps[`${platformName}`] = {};
-  if (platformName === "twitter") { userUpdateProps.twitterTokenSecret = ""; };
+  if (platformName === 'twitter') {
+    userUpdateProps.twitterTokenSecret = '';
+  }
 
   const options = defaultOptions;
 
-  await User.findByIdAndUpdate(id, userUpdateProps, options, (err, doc) => { 
-    if (!err) { 
+  await User.findByIdAndUpdate(id, userUpdateProps, options, (err, doc) => {
+    if (!err) {
       res.status(200).send(doc);
     }
-  }).clone().catch( err => { 
-    err.status = 422;
-    next(err);
   })
-
-}
+    .clone()
+    .catch((err) => {
+      err.status = 422;
+      next(err);
+    });
+};
 
 export const userFollowAll = async (
   req: IReqAuth,
@@ -60,7 +67,6 @@ export const userFollowAll = async (
   next: NextFunction
 ) => {
   try {
-
     const targetId = req.query['targetId'] as string;
     const sourceId = req.user._id;
     const twitterUsername = req.query['twitterUsername'] as string;
@@ -80,8 +86,8 @@ export const userFollowAll = async (
     const doTwitterFollow = await twitter.post('friendships/create', {
       screen_name: twitterUsername,
     });
-    
-     const doGitHubFollow = await octokit.request(
+
+    const doGitHubFollow = await octokit.request(
       `PUT /user/following/${gitHubUsername}`,
       {
         username: gitHubUsername,
@@ -89,27 +95,33 @@ export const userFollowAll = async (
     );
 
     const options = defaultOptions;
-    let allFollowedIds: any = { };
-    if (req.user.alreadyFollowingTheseIds) { 
-      allFollowedIds = { 
-        ... req.user.alreadyFollowingTheseIds
-      }
+    let allFollowedIds: any = {};
+    if (req.user.alreadyFollowingTheseIds) {
+      allFollowedIds = {
+        ...req.user.alreadyFollowingTheseIds,
+      };
     }
     allFollowedIds[targetId] = true;
 
-    const userUpdateProps = { 
-      alreadyFollowingTheseIds : allFollowedIds
-    }
-    
-    await User.findByIdAndUpdate(sourceId, userUpdateProps, options, (err, user) => { 
-      if (!err) { 
-        res.status(200).send(user);
+    const userUpdateProps = {
+      alreadyFollowingTheseIds: allFollowedIds,
+    };
+
+    await User.findByIdAndUpdate(
+      sourceId,
+      userUpdateProps,
+      options,
+      (err, user) => {
+        if (!err) {
+          res.status(200).send(user);
+        }
       }
-    }).clone().catch( err => { 
-      err.status = 400;
-      next(err);
-    })
-    
+    )
+      .clone()
+      .catch((err) => {
+        err.status = 400;
+        next(err);
+      });
   } catch (err) {
     next(err);
   }
@@ -127,8 +139,11 @@ export const getUser = async (
   }
 };
 
-
-export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const users = await User.find(
       { gitHubConnected: true, twitterConnected: true },
@@ -145,5 +160,3 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
     next(err);
   }
 };
-
-

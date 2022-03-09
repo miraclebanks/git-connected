@@ -60,17 +60,26 @@ export const UserCard: React.FC<IUser> = (user) => {
         </CardHeader>
         <CardBio>{user.gitHubConnected ? user.gitHub.json.bio : null}</CardBio>
         <CardMeta>
-          {user.gitHub && user.gitHub.json && 
-            <CardMetaFeature href={ "https://www.twitter.com/" + user.gitHub.json?.twitter_username} target="_blank"> 
+          {user.gitHub && user.gitHub.json && (
+            <CardMetaFeature
+              href={
+                'https://www.twitter.com/' + user.gitHub.json?.twitter_username
+              }
+              target="_blank"
+            >
               <TwitterIcon />
             </CardMetaFeature>
-          }
-          {user.gitHub && user.gitHub.json &&
+          )}
+          {user.gitHub && user.gitHub.json && (
             <CardMetaFeature href={user.gitHub.json.html_url} target="_blank">
               <GitHubIcon />
             </CardMetaFeature>
-          }
-          {user.gitHub && user.twitter ? "" : <div>{"Connect Github & Twitter to be listed"}</div> }
+          )}
+          {user.gitHub && user.twitter ? (
+            ''
+          ) : (
+            <div>{'Connect Github & Twitter to be listed'}</div>
+          )}
           {/* <CardMetaFeature>
             <LinkedInIcon />
           </CardMetaFeature> */}

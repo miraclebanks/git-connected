@@ -1,6 +1,12 @@
 import express from 'express';
 import auth from '../middleware/auth';
-import { userUpdate, userFollowAll, getUser, getAllUsers, removeConnection } from '../controllers/userControllers'
+import {
+  userUpdate,
+  userFollowAll,
+  getUser,
+  getAllUsers,
+  removeConnection,
+} from '../controllers/userControllers';
 
 const router = express.Router();
 
@@ -12,6 +18,6 @@ router.post('/user/followall', auth, userFollowAll);
 
 router.get('/user/getuser', auth, getUser);
 
-router.get('/user/getallusers', getAllUsers)
+router.get('/user/getallusers', getAllUsers);
 
 export default router;
